@@ -1368,7 +1368,15 @@ function RunCommand {
 
 # check if there is connectivity to Azure using Get-AzVM command
 function CheckAzureConnectivity {
-
+    # Import Azure modules explicitly
+    try {
+        Import-Module Az.Accounts -Force -ErrorAction Stop
+        WriteRunLog -category "INFO" -message "Az.Accounts module loaded successfully"
+    }
+    catch {
+        WriteRunLog -category "ERROR" -message "Failed to load Az.Accounts module: $_"
+        exit
+    }
     # check if connected to Azure
     if ($SubscriptionId) {
         $_SubscriptionInfo = Get-AzSubscription -SubscriptionId $SubscriptionId
